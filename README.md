@@ -34,13 +34,13 @@ OS：Win10等；
 
 要选择坐标参考系统，然后计算边框、经纬度边框范围。
 
-![image-20240726203820081](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262038150.png)
+![图片1](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262053962.svg)
 
 
 
 **（2）前端加载地图**
 
-![image-20240726203858188](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262038209.png)
+![图片2](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262053989.svg)
 
 使用Vue3的onMounted生命周期钩子使地图在组件挂载时调用，加载了OSM地图，自己发布的WMS图层，百度地图矢量注记。
 
@@ -48,27 +48,27 @@ ImageWMS中设置了地图Url，参数和服务类型，保证能够正确加载
 
 要实现点击WMS图层出现要素属性弹窗，需要调用getFeatureInfoUrl函数，在其中设置点击的经纬度，地图缩放等级，坐标系，图层类型等，使用fetch请求Url，将response转换为json格式，并获取属性信息，加载弹出框，此外设置了鼠标事件，将弹出框设置在点击的位置，并设置了转换动画，移动缩放到点击的位置，见图3。
 
-![image-20240726203916442](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262039463.png)
+![图片3](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262056268.svg)
 
-![image-20240726203928255](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262039307.png)
+![图片4](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262056553.svg)
 
 实现查询图层并高亮显示，使用了TileWMS，通过CQL\_FILTER对属性进行查询，并设置styles。还实现了删除高亮图层的功能，见图5。
 
-![image-20240726203940409](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262039431.png)
+![图片5](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262057519.svg)
 
-![image-20240726203947368](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262039414.png)
+![图片6](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262057248.svg)
+
+
 
 还设置了切换地图的功能，有OSM图层，百度矢量地图，百度影像地图，代码实现如下：
 
-![image-20240726203953700](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262039719.png)
+![图片7](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262057181.svg)
 
-![image-20240726203959419](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262039441.png)
+![图片8](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262057308.svg)
 
 通过创建TileLayer对象并通过XYZ对象设置地图的url实现加载，并调整地图的插入顺序，保证自己发布的中国资源枯竭城市图层在其它底图之上，避免被遮挡。
 
-![image-20240726204017492](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262040527.png)
-
-![image-20240726204022054](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262040079.png)
+![image-20240726204022054](https://blogma.oss-cn-hangzhou.aliyuncs.com/blog/202407262058490.svg)
 
 **6.小结**
 

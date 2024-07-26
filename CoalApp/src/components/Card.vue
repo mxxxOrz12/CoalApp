@@ -1,17 +1,22 @@
 <script setup>
-    import { ref } from 'vue'
+    import { ref, watch } from 'vue'
     import { toLonLat } from 'ol/proj';
     import { mapTile } from '../views/Map.js'
     import Overlay from 'ol/Overlay';
     import TileLayer from "ol/layer/Tile";
     import TileWMS from 'ol/source/TileWMS';
-
+    import ImageLayer from "ol/layer/Image";
     import XYZ from 'ol/source/XYZ';
-
+    import ImageWMS from "ol/source/ImageWMS";
 
     const input1 = ref('');
     let highlightLayer = ref(null);
     let baiduAnnoLayer = ref(null);
+
+    let ChinaLayer = ref(false);
+    let CityLayer = ref(false);
+    let chinaLayerInstance = null;
+    let cityLayerInstance = null;
 
     const searchCity = async () => {
         const cityName = input1.value.trim();
@@ -62,7 +67,6 @@
             })
         });
         mapTile.value.getLayers().insertAt(0, baiduVecLayer);
-        console.log(mapTile.value.getLayers().getArray());
     };
 
 
@@ -79,7 +83,6 @@
             })
         });
         mapTile.value.getLayers().insertAt(0, osmLayer);
-        console.log(mapTile.value.getLayers().getArray());
     };
 
     const BaiduImg = () => {
@@ -87,33 +90,97 @@
         if (baiduAnnoLayer.value) {
             mapTile.value.removeLayer(baiduAnnoLayer.value);
         }
-
         const layers = mapTile.value.getLayers().getArray();
-
-        // 移除第一个图层
         if (layers.length > 0) {
             mapTile.value.removeLayer(layers[0]);
         }
-
-        // 创建百度影像地图图层
         const baiduImgLayer = new TileLayer({
             source: new XYZ({
                 url: 'http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=6&x={x}&y={y}&z={z}'
             })
         });
-
-        // 创建百度注记图层
         baiduAnnoLayer.value = new TileLayer({
             source: new XYZ({
                 url: 'http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=8&x={x}&y={y}&z={z}'
             })
         });
         mapTile.value.getLayers().insertAt(0, baiduImgLayer);
-        mapTile.value.addLayer(baiduAnnoLayer.value);
-
-        console.log(mapTile.value.getLayers().getArray());
+        // mapTile.value.addLayer(baiduAnnoLayer.value);
     };
 
+
+    const addChinaLayer = () => {
+        const layerId = 'chinaLayer';
+        const existingLayer = mapTile.value.getLayers().getArray().find(layer => layer.get('id') === layerId);
+
+        if (!existingLayer) {
+            const chinaLayerInstance = new TileLayer({
+                source: new XYZ({
+                    url: 'http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=8&x={x}&y={y}&z={z}'
+                })
+            });
+            chinaLayerInstance.set('id', layerId);
+            mapTile.value.addLayer(chinaLayerInstance);
+            console.log(chinaLayerInstance);
+            console.log(mapTile.value.getLayers().getArray());
+        }
+    };
+
+    const removeChinaLayer = () => {
+        const layerId = 'chinaLayer';
+        const layers = mapTile.value.getLayers().getArray();
+        const layerToRemove = layers.find(layer => layer.get('id') === layerId);
+
+        if (layerToRemove) {
+            mapTile.value.removeLayer(layerToRemove);
+        }
+    };
+    const addCityLayer = () => {
+        const layerId = 'cityLayer';
+        const existingLayer = mapTile.value.getLayers().getArray().find(layer => layer.get('id') === layerId);
+
+        if (!existingLayer) {
+            const cityLayerInstance = new ImageLayer({
+                source: new ImageWMS({
+                    url: 'http://localhost:8088/geoserver/ChinaCoal/wms',
+                    params: {
+                        'LAYERS': 'ChinaCoal:37cityPro',
+                        'VERSION': '1.1.0',
+                        'FORMAT': 'image/png'
+                    },
+                    serverType: 'geoserver'
+                })
+            });
+            cityLayerInstance.set('id', layerId);
+            mapTile.value.addLayer(cityLayerInstance);
+        }
+    };
+
+    const removeCityLayer = () => {
+        const layerId = 'cityLayer';
+        mapTile.value.getLayers().forEach(layer => {
+            if (layer instanceof ImageLayer && layer.get('id') === layerId) {
+                console.log(layer);
+                mapTile.value.removeLayer(layer);
+            }
+        });
+    };
+
+    watch(ChinaLayer, (newVal) => {
+        if (newVal) {
+            addChinaLayer();
+        } else {
+            removeChinaLayer();
+        }
+    });
+
+    watch(CityLayer, (newVal) => {
+        if (newVal) {
+            addCityLayer();
+        } else {
+            removeCityLayer();
+        }
+    });
 
 </script>
 
@@ -137,6 +204,11 @@
             <div class="Card-search-delete">
                 <el-button type="primary" plain @click="removeLayer">清除高亮图层</el-button>
             </div>
+            <div class="Card-layer">
+                <span>中国矢量边界图层</span> <el-switch v-model="ChinaLayer" />
+                <span>资源枯竭城市图层</span> <el-switch v-model="CityLayer" />
+            </div>
+
 
         </el-card>
 
@@ -154,6 +226,7 @@
 
         position: absolute;
         z-index: 2;
+        pointer-events: none;
     }
 
     .Card-wrapper {
@@ -161,6 +234,7 @@
         position: relative;
         left: 100px;
         color: #5281aa;
+        pointer-events: auto;
     }
 
     .Card-wrapper-header {
@@ -188,5 +262,13 @@
         padding-top: 20px;
         display: flex;
         justify-content: flex-start;
+    }
+
+    .Card-layer {
+        padding-top: 20px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
     }
 </style>

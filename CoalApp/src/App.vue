@@ -11,11 +11,8 @@
     <div class="Map-contanier">
       <Card />
       <MapView />
-
     </div>
-
   </div>
-
 </template>
 
 <style>

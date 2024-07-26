@@ -46,22 +46,22 @@
                 new TileLayer({
                     source: new OSM()
                 }),
-                new ImageLayer({
-                    source: new ImageWMS({
-                        url: 'http://localhost:8088/geoserver/ChinaCoal/wms',
-                        params: {
-                            'LAYERS': 'ChinaCoal:37cityPro',
-                            'VERSION': '1.1.0',
-                            'FORMAT': 'image/png'
-                        },
-                        serverType: 'geoserver'
-                    })
-                }),
-                new TileLayer({
-                    source: new XYZ({
-                        url: 'http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=8&x={x}&y={y}&z={z}'
-                    })
-                }),
+                // new ImageLayer({
+                //     source: new ImageWMS({
+                //         url: 'http://localhost:8088/geoserver/ChinaCoal/wms',
+                //         params: {
+                //             'LAYERS': 'ChinaCoal:37cityPro',
+                //             'VERSION': '1.1.0',
+                //             'FORMAT': 'image/png'
+                //         },
+                //         serverType: 'geoserver'
+                //     })
+                // }),
+                // new TileLayer({
+                //     source: new XYZ({
+                //         url: 'http://wprd0{1-4}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=8&x={x}&y={y}&z={z}'
+                //     })
+                // }),
 
             ],
             view: view
@@ -78,12 +78,14 @@
         mapTile.value.addOverlay(popup.value);
 
         mapTile.value.on('singleclick', async function (evt) {
+            const layerId = 'cityLayer';
+            const cityLayer = mapTile.value.getLayers().getArray().find(layer => layer.get('id') === layerId);
+
             const viewResolution = mapTile.value.getView().getResolution();
-            const url = mapTile.value.getLayers().getArray()[1].getSource().getFeatureInfoUrl(
+            const url = cityLayer.getSource().getFeatureInfoUrl(
                 evt.coordinate, viewResolution, 'EPSG:3857',
                 { 'INFO_FORMAT': 'application/json' }
             );
-            console.log(url)
             if (url) {
                 fetch(url)
                     .then(response => response.json())
@@ -118,7 +120,7 @@
     .map {
         width: 100%;
         height: 100vh;
-        /* 使地图全屏显示 */
+
     }
 
     .ol-popup {

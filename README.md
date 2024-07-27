@@ -18,7 +18,7 @@
 
 <div>
 <img alt="Static Badge" src="https://img.shields.io/badge/Vue-black?logo=vuedotjs" style="width: 100px; height: auto;">
-<img alt="Static Badge" src="https://img.shields.io/badge/OpenLayers-black?logo=openlayers&labelColor=%231F6B75" style="width: 180px; height: auto;">
+<img alt="Static Badge" src="https://img.shields.io/badge/OpenLayers-black?logo=openlayers&labelColor=%231F6B75" style="width: 190px; height: auto;">
     </div>
 
 <hr/>

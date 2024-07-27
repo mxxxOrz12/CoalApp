@@ -1,11 +1,27 @@
 
 
+
+
 # **基于OpenLayers的WebGIS简单功能开发**
 
 <div>
-<img alt="Static Badge" src="https://img.shields.io/badge/QQ-402674230-blue">
-<img alt="Static Badge" src="https://img.shields.io/badge/ZhiHu-%E7%9F%A5%E4%B9%8E-blue?link=https%3A%2F%2Fwww.zhihu.com%2Fpeople%2Fping-chang-xin-99-56">
+  <img alt="Static Badge" src="https://img.shields.io/badge/QQ-402674230-blue" style="width: 200px; height: auto;">
+  <a href="https://www.zhihu.com/people/ping-chang-xin-99-56" style="text-decoration: none; color: inherit;">
+      <img alt="Static Badge" src="https://img.shields.io/badge/ZhiHu-black?style=flat-square&logo=zhihu&logoSize=amg&link=https%3A%2F%2Fwww.zhihu.com%2Fpeople%2Fping-chang-xin-99-56" style="width: 120px; height: auto;">
+  </a>
+   <a href="https://blog.csdn.net/shadoma?spm=1000.2115.3001.5343" style="text-decoration: none; color: inherit;">
+        <img alt="Static Badge" src="https://img.shields.io/badge/CSDN-%E5%8D%9A%E5%AE%A2-black?color=%23d74f4f" style="width: 140px; height: auto;">
+    </a>
 </div>
+
+<hr/>
+
+<div>
+<img alt="Static Badge" src="https://img.shields.io/badge/Vue-black?logo=vuedotjs" style="width: 100px; height: auto;">
+<img alt="Static Badge" src="https://img.shields.io/badge/OpenLayers-black?logo=openlayers&labelColor=%231F6B75" style="width: 180px; height: auto;">
+    </div>
+
+<hr/>
 
 
 
